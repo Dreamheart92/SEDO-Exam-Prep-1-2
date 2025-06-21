@@ -1,29 +1,29 @@
-name: .NET CI
+name: .NET 6 CI
 
 on:
   push:
     branches:
       - develop
-      - 'feature/**'   # matches all feature branches
+      - feature/**
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'  # or 7.0.x / 6.0.x depending on your project
+    - name: Setup .NET 6.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore
+    - name: Restore dependencies
+      run: dotnet restore
 
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
 
-      - name: Run tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
+    - name: Run Tests
+      run: dotnet test --no-restore --no-build --configuration Release --verbosity normal
