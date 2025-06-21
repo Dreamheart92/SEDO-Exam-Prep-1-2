@@ -17,6 +17,13 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0.x'
+          # Ensure we include the runtime as well
+          include-prerelease: false
+
+      - name: Verify .NET installation
+        run: |
+          dotnet --info
+          dotnet --list-runtimes
 
       - name: Restore dependencies
         run: dotnet restore
@@ -26,4 +33,3 @@ jobs:
 
       - name: Run tests
         run: dotnet test --no-build --configuration Release --verbosity normal
-
