@@ -7,27 +7,23 @@ on:
       - feature/**
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install .NET 6 SDK and Runtime
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 6.0.x
-        dotnet-quality: 'ga'
+      - name: Setup .NET 6 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
 
-    - name: Display .NET info
-      run: dotnet --info
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release
 
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
+      - name: Run tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
 
-    - name: Test
-      run: dotnet test --no-build --configuration Release --verbosity normal
